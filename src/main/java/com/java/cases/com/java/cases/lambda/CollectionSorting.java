@@ -9,31 +9,18 @@ public class CollectionSorting {
 
     public static void main(String[] args){
 
+
         /**
          * Java 7
          */
-        Comparator<User> byName = new Comparator<User>() {
-            @Override
-            public int compare(User o1, User o2) {
-                return o1.getName().compareTo(o2.getName());
-            }
-        };
-
-        Comparator<User> byId = new Comparator<User>() {
-            @Override
-            public int compare(User o1, User o2) {
-                return o1.getId() - o2.getId();
-            }
-        };
-
         List<User> compareJ7 = createUserList();
 
         System.out.println("Java 7");
         System.out.println(compareJ7);
-        Collections.sort(compareJ7, byName);
+        Collections.sort(compareJ7, User.byName);
         System.out.println(compareJ7);
 
-        Collections.sort(compareJ7, byId);
+        Collections.sort(compareJ7, User.byId);
         System.out.println(compareJ7);
 
 
@@ -44,11 +31,25 @@ public class CollectionSorting {
 
         System.out.println("Java 8");
         System.out.println(compareJ8);
-        compareJ8.sort(byName);
+        compareJ8.sort(User.byName);
         System.out.println(compareJ8);
 
-        compareJ8.sort(byId);
+        compareJ8.sort(User.byId);
         System.out.println(compareJ8);
+
+
+        System.out.println("Java 8 - Lambda");
+
+        List<User> compareJ8Lambda = createUserList();
+
+        System.out.println(compareJ8Lambda);
+        //compareJ8Lambda.sort((User o1, User o2)->o1.getName().compareTo(o2.getName()));
+        compareJ8Lambda.sort(Comparator.comparing(User::getName));// Alternative using @java.util.Comparator
+        System.out.println(compareJ8Lambda);
+
+        //compareJ8Lambda.sort((User o1, User o2)->o1.getId()- o2.getId());
+        compareJ8Lambda.sort(Comparator.comparingInt(User::getId));// Alternative using @java.util.Comparator
+        System.out.println(compareJ8Lambda);
 
     }
 
@@ -71,6 +72,7 @@ class User{
     private String name;
 
     private int age;
+
 
     public User(int id, String name, int age) {
         this.id = id;
@@ -101,6 +103,20 @@ class User{
     public void setAge(int age) {
         this.age = age;
     }
+
+    static Comparator<User> byName = new Comparator<User>() {
+        @Override
+        public int compare(User o1, User o2) {
+            return o1.getName().compareTo(o2.getName());
+        }
+    };
+
+    static Comparator<User> byId = new Comparator<User>() {
+        @Override
+        public int compare(User o1, User o2) {
+            return o1.getId() - o2.getId();
+        }
+    };
 
     @Override
     public boolean equals(Object o) {
